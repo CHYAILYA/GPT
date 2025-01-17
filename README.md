@@ -17,7 +17,7 @@ sudo apt-get install espeak
 sudo apt-get install flac
 ``````
 
-
+ - [TUTORIAL IN HERE ](https://www.youtube.com/watch?v=Sr4QnzyEeJ8)
 ## Acknowledgements
 
  - [GET API KEY GPT](https://platform.openai.com/docs/overview)
