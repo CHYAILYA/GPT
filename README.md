@@ -27,10 +27,3 @@ sudo apt-get install flac
 
 ## 🔗 Links
 [![YOUTUBE](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://www.youtube.com/@CHYAILYA)
-
-
-## Acknowledgements
-
- - [GET API KEY GPT](https://platform.openai.com/docs/overview)
- - [TEXT TO SEPACH](https://platform.openai.com/docs/guides/text-to-speech)
- - [MODEL GPT](https://platform.openai.com/docs/models)
