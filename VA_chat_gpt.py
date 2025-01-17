@@ -7,10 +7,8 @@ import os
 # Set up OpenAI API key
 openai.api_key = "your api in here"
 
-# Customizing the role for the chatbot
 messages = [{"role": "system", "content": "Your name is alexa and give answers in 2 lines"}]
 
-# Function to get response from OpenAI GPT
 def get_response(user_input):
     messages.append({"role": "user", "content": user_input})
     response = openai.ChatCompletion.create(
@@ -21,7 +19,6 @@ def get_response(user_input):
     messages.append({"role": "assistant", "content": ChatGPT_reply})
     return ChatGPT_reply
 
-# Function to convert text to speech and save as MP3
 def text_to_speech(text):
     url = "https://api.openai.com/v1/audio/speech"
     headers = {
@@ -45,7 +42,6 @@ def text_to_speech(text):
 def play_audio():
     os.system("mpg123 speech.mp3")
 
-# listening and responding
 listening = True
 
 while listening:
