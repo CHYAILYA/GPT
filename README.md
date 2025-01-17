@@ -1,19 +1,4 @@
 
-# Project Title
-
-A brief description of what this project does and who it's for
-
-
-## Documentation
-
-[Documentation](https://linktodocumentation)
-
-
-# Project Title
-
-A brief description of what this project does and who it's for
-
-
 ## Environment Variables
 This file lists the required Python libraries along with their versions to ensure compatibility.
 To run this project, you will need to add the following environment variables to your .env file
@@ -23,6 +8,14 @@ To run this project, you will need to add the following environment variables to
 `requests==2.31.0`
 `sudo apt-get install mpg123`
 
+sudo apt-get install portaudio19-dev
+sudo apt-get install python3-pyaudio
+pip install speechrecognition
+pip install SpeechRecognition pyaudio
+pip install pyttsx3
+pip install openai==0.28
+sudo apt-get install espeak
+sudo apt-get install flac
 
 
 ## Acknowledgements
