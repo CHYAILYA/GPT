@@ -21,7 +21,7 @@ sudo apt-get install flac
 ## Acknowledgements
 
  - [GET API KEY GPT](https://platform.openai.com/docs/overview)
- - [TEXT TO SEPACH](https://platform.openai.com/docs/guides/text-to-speech)
+ - [TEXT TO SPEECH](https://platform.openai.com/docs/guides/text-to-speech)
  - [MODEL GPT](https://platform.openai.com/docs/models)
 
 
