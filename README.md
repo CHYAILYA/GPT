@@ -25,5 +25,5 @@ sudo apt-get install flac
  - [MODEL GPT](https://platform.openai.com/docs/models)
 
 
-## 🔗 Links
+## 🔗 Subscribe My Youtube
 [![YOUTUBE](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://www.youtube.com/@CHYAILYA)
