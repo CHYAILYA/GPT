@@ -14,8 +14,6 @@ pip install SpeechRecognition pyaudio
 pip install pyttsx3
 pip install openai==0.28
 pip install google-cloud-texttospeech
-
-For Gemini in here
 ``````
 ```bash
 pip install google-cloud-texttospeech
