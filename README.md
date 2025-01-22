@@ -3,7 +3,22 @@
 This file lists the required Python libraries along with their versions to ensure compatibility.
 To run this project, you will need to add the following environment variables to your .env file
 
-
+Install pipx:
+```bash
+sudo apt-get update
+sudo apt-get install pipx
+``````
+Ensure pipx is set up correctly:
+```bash
+pipx ensurepath
+``````
+Use pipx to install the required packages:
+```bash
+pipx install google-cloud-texttospeech
+pipx install SpeechRecognition
+pipx install pyaudio
+``````
+This approach should help you manage the installation of Python packages without interfering with the system Python installation.
 `requests==2.31.0`
 `sudo apt-get install mpg123`
 ```bash
