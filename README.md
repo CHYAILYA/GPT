@@ -7,7 +7,9 @@ INSTALL HERE
 ```bash
 pip install -r requirements.txt
 ```
+
 OR HERE
+
 ```bash
 pip install -q -U google-generativeai
 sudo apt-get install portaudio19-dev
