@@ -26,5 +26,6 @@ pip install google-cloud-texttospeech
  - [TEXT TO SPEECH](https://platform.openai.com/docs/guides/text-to-speech)
  - [MODEL GPT](https://platform.openai.com/docs/models)
  - [MODEL Gemini]([https://platform.openai.com/docs/models](https://ai.google.dev/gemini-api/docs/models/gemini?hl=id))
+ - 
 ## 🔗 Subscribe My Youtube
 [![YOUTUBE](https://img.shields.io/badge/my_portfolio-000?style=for-the-badge&logo=ko-fi&logoColor=white)](https://www.youtube.com/@CHYAILYA)
