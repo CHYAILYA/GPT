@@ -1,59 +1,201 @@
+from ollama import chat
 import speech_recognition as sr
-import requests
-import json
-import os
 from gtts import gTTS
+from io import BytesIO
+import sounddevice as sd
+import soundfile as sf
+import threading
+import queue
+import time
+import pyaudio
 
-LLAMA_API_URL = "https://api.llama.ai/v1/generate"
-LLAMA_API_KEY = "your-llama-api-key"
+# Bahasa default untuk speech recognition
+slang = "en-US"  # English (United States)
 
-def get_response(user_input):
-    headers = {
-        "Authorization": f"Bearer {LLAMA_API_KEY}",
-        "Content-Type": "application/json"
-    }
-    
-    data = {
-        "input": user_input,
-        "max_tokens": 150
-    }
-    
-    response = requests.post(LLAMA_API_URL, headers=headers, json=data)
-    
-    if response.status_code == 200:
-        response_data = response.json()
-        return response_data.get("text", "I'm not sure how to respond.")
-    else:
-        return "Error with the LLaMA API request."
+# Fungsi untuk menampilkan daftar mikrofon yang tersedia
+def list_microphones():
+    p = pyaudio.PyAudio()
+    print("Available microphones:")
+    for i in range(p.get_device_count()):
+        device_info = p.get_device_info_by_index(i)
+        if device_info["maxInputChannels"] > 0:  # Hanya tampilkan perangkat input
+            print(f"{i}: {device_info['name']}")
+    p.terminate()
 
-def text_to_speech(text):
-    tts = gTTS(text=text, lang='en')
-    tts.save("speech.mp3")
+# Fungsi untuk memilih mikrofon
+def select_microphone():
+    list_microphones()
+    mic_index = int(input("Enter the index of the microphone you want to use: "))
+    return mic_index
 
-def play_audio():
-    os.system("mpg123 speech.mp3")
+# Fungsi untuk menampilkan daftar speaker (output audio)
+def list_speakers():
+    devices = sd.query_devices()
+    print("Available speakers:")
+    for i, device in enumerate(devices):
+        if device['max_output_channels'] > 0:  # Tampilkan hanya perangkat output
+            print(f"{i}: {device['name']}")
 
-listening = True
+# Fungsi untuk memilih speaker
+def select_speaker():
+    list_speakers()
+    speaker_index = int(input("Enter the index of the speaker you want to use: "))
+    return speaker_index
 
-while listening:
-    with sr.Microphone() as source:
-        recognizer = sr.Recognizer()
-        recognizer.adjust_for_ambient_noise(source)
-        recognizer.dynamic_energy_threshold = 3000
+# Fungsi untuk mengirim permintaan ke model LLM
+def chatfun(request, text_queue, llm_finished):
+    global messages
 
-        try:
+    messages.append({'role': 'user', 'content': request})
+
+    response = chat(
+        model='llama3',
+        messages=messages,
+        stream=True,
+    )
+
+    shortstring = ''
+    reply = ''
+
+    for chunk in response:
+        ctext = chunk['message']['content']
+        shortstring += ctext
+
+        # Kirim teks ke antrian jika sudah cukup panjang
+        if len(shortstring) > 100:  # Ubah batas ini sesuai kebutuhan
+            print(shortstring, end='', flush=True)
+            text_queue.put(shortstring.replace("*", ""))
+            reply += shortstring
+            shortstring = ''
+
+        time.sleep(0.1)  # Kurangi penundaan jika diperlukan
+
+    if shortstring:
+        print(shortstring, end='', flush=True)
+        text_queue.put(shortstring.replace("*", ""))
+        reply += shortstring
+
+    messages.append({'role': 'assistant', 'content': reply})
+    llm_finished.set()  # Tandai bahwa generasi teks selesai
+
+# Fungsi untuk mengonversi teks ke suara
+def speak_text(text, speaker_index):
+    # Buat file audio sementara dari teks
+    mp3file = BytesIO()
+    tts = gTTS(text, lang="en", tld='us', slow=False)  # Percepat konversi
+    tts.write_to_fp(mp3file)
+    mp3file.seek(0)
+
+    try:
+        # Muat file audio ke buffer
+        audio_data, samplerate = sf.read(mp3file)
+        # Putar audio melalui speaker pilihan
+        sd.play(audio_data, samplerate=samplerate, device=speaker_index)
+        sd.wait()
+    except Exception as e:
+        print(f"Error playing audio: {e}")
+    finally:
+        mp3file.close()
+
+# Fungsi utama
+def main():
+    global messages
+
+    # Inisialisasi variabel global
+    messages = []
+
+    # Memilih mikrofon
+    mic_index = select_microphone()
+    mic = sr.Microphone(device_index=mic_index)
+
+    # Memilih speaker
+    speaker_index = select_speaker()
+
+    rec = sr.Recognizer()
+    rec.dynamic_energy_threshold = False
+    rec.energy_threshold = 400
+
+    # Loop untuk percakapan
+    while True:
+        with mic as source:
+            rec.adjust_for_ambient_noise(source, duration=1)
             print("Listening...")
-            audio = recognizer.listen(source, timeout=5.0)
-            response = recognizer.recognize_google(audio)
-            print(response)
 
-            if "alexa" in response.lower():
-                response_from_llama = get_response(response)
-                text_to_speech(response_from_llama)
-                play_audio()
+            try:
+                audio = rec.listen(source, timeout=20, phrase_time_limit=30)
+                text = rec.recognize_google(audio, language=slang)
 
-            else:
-                print("Didn't recognize 'alexa'.")
+                # Ambil permintaan langsung
+                text = text.strip().lower()
 
-        except sr.UnknownValueError:
-            print("Didn't recognize anything.")
+                if text.startswith("alexa"):
+                    # Hapus kata "alexa" dari teks sebelum dikirim ke AI
+                    request = text.replace("alexa", "", 1).strip()
+                    print(f"You: {text}\nAI: ", end='')
+
+                    text_queue = queue.Queue()
+                    audio_queue = queue.Queue()
+
+                    llm_finished = threading.Event()
+                    textdone = threading.Event()
+                    stop_event = threading.Event()
+
+                    llm_thread = threading.Thread(target=chatfun, args=(request, text_queue, llm_finished))
+                    tts_thread = threading.Thread(target=text2speech, args=(text_queue, textdone, llm_finished, audio_queue, speaker_index, stop_event))
+                    play_thread = threading.Thread(target=play_audio, args=(audio_queue, textdone, stop_event))
+
+                    llm_thread.start()
+                    tts_thread.start()
+                    play_thread.start()
+
+                    llm_finished.wait()
+                    llm_thread.join()
+
+                    stop_event.set()
+                    tts_thread.join()
+                    play_thread.join()
+
+                    print('\n')
+
+                else:
+                    # Abaikan jika tidak dimulai dengan "alexa"
+                    print(f"Ignored: {text}")
+
+            except sr.UnknownValueError:
+                print("Sorry, I didn't catch that.")
+            except sr.RequestError:
+                print("Speech recognition service is down.")
+            except Exception as e:
+                print(f"Error: {e}")
+
+# Fungsi untuk mengonversi teks ke suara dan memasukkannya ke dalam antrian audio
+def text2speech(text_queue, textdone, llm_finished, audio_queue, speaker_index, stop_event):
+    while not stop_event.is_set():
+        if not text_queue.empty():
+            text = text_queue.get(timeout=0.5)
+            mp3file = BytesIO()
+            tts = gTTS(text, lang="en", tld='us', slow=False)  # Percepat konversi
+            tts.write_to_fp(mp3file)
+            audio_queue.put((mp3file, speaker_index))
+            text_queue.task_done()
+
+        if llm_finished.is_set() and text_queue.empty():
+            textdone.set()
+            break
+
+# Fungsi untuk memutar audio dari antrian audio
+def play_audio(audio_queue, textdone, stop_event):
+    while not stop_event.is_set():
+        if not audio_queue.empty():
+            mp3audio, speaker_index = audio_queue.get()
+            mp3audio.seek(0)
+            audio_data, samplerate = sf.read(mp3audio)
+            sd.play(audio_data, samplerate=samplerate, device=speaker_index)
+            sd.wait()
+            audio_queue.task_done()
+
+        if textdone.is_set() and audio_queue.empty():
+            break
+
+if __name__ == "__main__":
+    main()
