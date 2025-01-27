@@ -3,3 +3,5 @@ google-generativeai
 gtts
 pygame
 sounddevice
+requests
+
