@@ -21,6 +21,7 @@ pip install openai==0.28
 pip install google-cloud-texttospeech
 ``````
 
+
  - [TUTORIAL IN HERE ](https://www.youtube.com/watch?v=Sr4QnzyEeJ8)
    
 ## Acknowledgements
