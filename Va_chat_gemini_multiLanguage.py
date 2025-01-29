@@ -7,7 +7,7 @@ import os
 import random
 
 # Set up Gemini API key
-genai.configure(api_key="AIzaSyDTt1vyPQpzSRyI8pXIGLbIeY56BSb6hbM")
+genai.configure(api_key="")
 model = genai.GenerativeModel("gemini-1.5-flash")
 
 messages = [{"role": "system", "content": "Your name is alexa and give answers in 2 lines"}]
