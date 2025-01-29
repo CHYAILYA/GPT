@@ -24,6 +24,7 @@ pip install google-cloud-texttospeech
 
  - [TUTORIAL IN HERE ](https://www.youtube.com/watch?v=Sr4QnzyEeJ8)
    
+   
 ## Acknowledgements
  - [GET API KEY Gemini](https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwjx-P705YuLAxUK0TwCHQNOBjQYABAAGgJzZg&ae=2&aspm=1&co=1&ase=5&gclid=Cj0KCQiA7se8BhCAARIsAKnF3rzWV_HxUHRz4J8y8Ndy1zgki_IzOPIg_L4dnFEuWZ9KA4Hw9xoARPgaApUAEALw_wcB&ohost=www.google.com&cid=CAESVuD2A68IXzmPTY-MXRcI8A7_QBBSQEodonuONpq_tkjwfgL59sHoptWzLJNNPYxoPxscQMBNc7N6XFbT3H8rjsb_f8vvzK93LY7tioYJJva_yDfdRYFH&sig=AOD64_2B-pX7VqyhwLOOruCS6SmVhafATQ&q&adurl&ved=2ahUKEwjLjPr05YuLAxWuT2wGHUnWE0kQ0Qx6BAgIEAE)
    
