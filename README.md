@@ -1,4 +1,5 @@
 create issue if there is a problem in coding or commenting on the video that shows this coding
+
 ## Environment Variables
 This file lists the required Python libraries along with their versions to ensure compatibility.
 To run this project, you will need to add the following environment variables to your .env file
