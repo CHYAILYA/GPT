@@ -1,5 +1,6 @@
 create issue if there is a problem in coding or commenting on the video that shows this coding
 playlist
+https://www.youtube.com/playlist?list=PLwnQwS-GpQ7TdxadamOyX5PrGnAaXW1Ur
 
 ## Environment Variables
 This file lists the required Python libraries along with their versions to ensure compatibility.
@@ -23,7 +24,7 @@ pip install google-cloud-texttospeech
 
 
  - [TUTORIAL IN HERE ](https://www.youtube.com/watch?v=Sr4QnzyEeJ8)
-   
+  - [TUTORIAL IN HERE ](https://www.youtube.com/watch?v=Sr4QnzyEeJ8)  
    
 ## Acknowledgements
  - [GET API KEY Gemini](https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwjx-P705YuLAxUK0TwCHQNOBjQYABAAGgJzZg&ae=2&aspm=1&co=1&ase=5&gclid=Cj0KCQiA7se8BhCAARIsAKnF3rzWV_HxUHRz4J8y8Ndy1zgki_IzOPIg_L4dnFEuWZ9KA4Hw9xoARPgaApUAEALw_wcB&ohost=www.google.com&cid=CAESVuD2A68IXzmPTY-MXRcI8A7_QBBSQEodonuONpq_tkjwfgL59sHoptWzLJNNPYxoPxscQMBNc7N6XFbT3H8rjsb_f8vvzK93LY7tioYJJva_yDfdRYFH&sig=AOD64_2B-pX7VqyhwLOOruCS6SmVhafATQ&q&adurl&ved=2ahUKEwjLjPr05YuLAxWuT2wGHUnWE0kQ0Qx6BAgIEAE)
